@@ -1,0 +1,11 @@
+﻿using ExpenseTracker.Framework;
+
+namespace ExpenseTracker.ServiceContracts.Features.__moduleNamespace__;
+
+public class __ComponentPrefix__ListingBusinessModel
+{
+    public __primaryKeyType__ Id { get; set; }
+
+    public string Name { get; set; } = null!;
+    // Add other properties as needed
+}

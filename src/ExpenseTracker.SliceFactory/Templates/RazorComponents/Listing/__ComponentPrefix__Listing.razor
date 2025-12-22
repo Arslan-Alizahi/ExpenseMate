@@ -1,0 +1,111 @@
+﻿@using ExpenseTracker.Framework
+@using ExpenseTracker.ServiceContracts.Features.__moduleNamespace__
+@using ExpenseTracker.ClientShared.Features.__moduleNamespace__
+@page "/__componentPrefixPlural__"
+@inherits ListingBase<__ComponentPrefix__ListingViewModel, __ComponentPrefix__ListingBusinessModel,
+                                __ComponentPrefix__FilterViewModel, __ComponentPrefix__FilterBusinessModel, I__ComponentPrefix__ListingDataService>
+
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-1">__ComponentPrefix__ Catalog</h2>
+            <p class="text-muted mb-0">Manage your __ComponentPrefixPlural__</p>
+        </div>
+        <a class="btn btn-dark shadow-sm" href="/__componentPrefixPlural__/create">
+            <i class="bi bi-plus-circle me-2"></i>Add New __ComponentPrefix__
+        </a>
+    </div>
+
+    <!-- Error Display -->
+    <If Condition="!string.IsNullOrEmpty(Error)">
+        <div class="alert alert-danger d-flex align-items-center mb-4" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <div>@Error</div>
+        </div>
+    </If>
+
+    <!-- Loading State -->
+    <If Condition="!ItemsLoaded || IsWorking">
+        <div class="loading-overlay" role="status" aria-live="polite" aria-busy="true">
+            <div class="text-center">
+                <div class="shimmer-text mb-3">Loading…</div>
+                <div class="spinner-border" role="presentation"></div>
+            </div>
+        </div>
+    </If>
+
+    <!-- Content -->
+    <If Condition="ItemsLoaded">
+        <!-- Empty State -->
+        <If Condition="!Items.Any()">
+            <div class="text-center py-5">
+                <div class="mb-4">
+                    <i class="bi bi-box-seam display-1 text-muted"></i>
+                </div>
+                <h4 class="text-muted mb-3">No __ComponentPrefixPlural__ Found</h4>
+                <p class="text-muted mb-4">Get started by creating your first __componentPrefix__.</p>
+                <a class="btn btn-dark" href="/__componentPrefixPlural__/create">
+                    <i class="bi bi-plus-circle me-2"></i>Create Your First __ComponentPrefix__
+                </a>
+            </div>
+        </If>
+
+        <!-- Items Grid -->
+        <If Condition="Items.Any()">
+            <div class="row g-4">
+                <ForEach Items="Items" Context="item">
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card h-100 shadow-sm border-1 __componentPrefix__-card">
+                            <div class="card-body d-flex flex-column">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <h5 class="card-title mb-0 text-truncate" title="@item.Name">@item.Name</h5>
+                                    <span class="badge bg-success ms-2">
+                                        Active
+                                    </span>
+                                </div>
+
+                                <p class="card-text text-muted flex-grow-1 mb-3">
+                                    <If Condition="!string.IsNullOrEmpty(item.Description)">
+                                        @(item.Description.Length > 180 ? item.Description[..180] + "..." : item.Description)
+                                    </If>
+                                    <If Condition="string.IsNullOrEmpty(item.Description)">
+                                        <em>No description available</em>
+                                    </If>
+                                </p>
+
+                                <div class="mt-auto">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">
+                                            <i class="bi bi-calendar3 me-1"></i>
+                                            @DateTime.Now.ToString("MMM dd, yyyy")
+                                        </small>
+                                        <a class="btn btn-outline-dark btn-sm" href="/__componentPrefixPlural__/edit/@item.Id">
+                                            <i class="bi bi-pencil me-1"></i>Edit
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ForEach>
+            </div>
+        </If>
+    </If>
+</div>
+
+
+
+
+
+
+
+
+
+
+@code {
+    
+
+    
+}

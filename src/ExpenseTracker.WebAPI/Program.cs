@@ -1,0 +1,38 @@
+﻿using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using Microsoft.EntityFrameworkCore;
+using ExpenseTracker.Server.Data;
+using ExpenseTracker.Server.DataServices.Extensions;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
+
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
+builder.Services.AddServerSideFeatureServices();
+
+// Add services to the container.
+// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddOpenApi();
+
+builder.Services.AddControllers()
+    .PartManager.ApplicationParts.Add(new AssemblyPart(typeof(ExpenseTracker.Server.DataServices.Extensions.FeaturesRegistrationExt).Assembly));
+
+var app = builder.Build();
+
+app.MapDefaultEndpoints();
+app.UseMiddleware<ErrorHandlerMiddleware>();
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+}
+
+app.UseHttpsRedirection();
+
+app.MapControllers();
+
+app.Run();
