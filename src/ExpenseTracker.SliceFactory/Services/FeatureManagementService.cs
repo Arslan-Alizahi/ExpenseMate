@@ -479,9 +479,7 @@ public class FeatureManagementService
         {
             ProjectType.ServiceContracts => "ServiceContracts",
             ProjectType.ServerSideServices => "ServerSideServices",
-            ProjectType.Controllers => "Controllers",
-            ProjectType.UILibrary => "RazorComponents",
-            ProjectType.ClientShared => "ClientShared",
+            ProjectType.MauiNativeApp => "MauiNativeApp",
             _ => null
         };
     }

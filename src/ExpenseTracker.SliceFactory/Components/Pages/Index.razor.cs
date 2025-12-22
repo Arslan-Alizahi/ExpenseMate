@@ -421,14 +421,7 @@ public enum ProjectType
 {
     ServiceContracts = 2,
     ServerSideServices = 3,
-    ClientSideServices = 4,
-    Controllers = 5,
-    UILibrary = 6,
-    CloudFunctions = 7,
-    ClientShared = 8,
-    ClientSharedDependency = 9,
-    ServerSideSharedDependency = 10
-
+    MauiNativeApp = 11
 }
 public enum FileCategory
 {

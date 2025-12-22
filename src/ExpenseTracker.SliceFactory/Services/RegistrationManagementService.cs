@@ -1,4 +1,4 @@
-﻿using ExpenseTracker.SliceFactory.Components.Pages;
+using ExpenseTracker.SliceFactory.Components.Pages;
 using ExpenseTracker.SliceFactory.Models;
 
 namespace ExpenseTracker.SliceFactory.Services;
@@ -10,7 +10,6 @@ public class RegistrationManagementService
 {
     private readonly ILogger<RegistrationManagementService> _logger;
     private const string SERVER_PLACEHOLDER = "//##ServerDataService##";
-    private const string CLIENT_PLACEHOLDER = "//##ClientDataService##";
 
     public RegistrationManagementService(ILogger<RegistrationManagementService> logger)
     {
@@ -32,10 +31,6 @@ public class RegistrationManagementService
                 {
                     await UpdateServerSideRegistrationsAsync(feature, project);
                 }
-                else if (project.ProjectType == ProjectType.ClientShared)
-                {
-                    await UpdateClientSideRegistrationsAsync(feature, project);
-                }
             }
 
             _logger.LogInformation("Successfully updated service registrations for feature: {ComponentPrefix}", feature.ComponentPrefix);
@@ -53,8 +48,6 @@ public class RegistrationManagementService
     public async Task RemoveRegistrationsForFeatureAsync(Feature feature, List<Project> projects)
     {
         _logger.LogWarning("Registration removal not supported with placeholder-based approach for feature: {ComponentPrefix}", feature.ComponentPrefix);
-        // Note: With placeholder approach, we don't remove registrations automatically
-        // This would require manual cleanup or a more sophisticated approach
         await Task.CompletedTask;
     }
 
@@ -69,19 +62,6 @@ public class RegistrationManagementService
 
         var registrations = GenerateServerSideRegistrations(feature);
         await UpdateRegistrationFileWithPlaceholderAsync(registrationFilePath, registrations, SERVER_PLACEHOLDER);
-    }
-
-    private async Task UpdateClientSideRegistrationsAsync(Feature feature, Project project)
-    {
-        var registrationFilePath = GetRegistrationFilePath(project, feature.BasePath);
-        if (!File.Exists(registrationFilePath))
-        {
-            _logger.LogWarning("Client-side registration file not found: {FilePath}", registrationFilePath);
-            return;
-        }
-
-        var registrations = GenerateClientSideRegistrations(feature);
-        await UpdateRegistrationFileWithPlaceholderAsync(registrationFilePath, registrations, CLIENT_PLACEHOLDER);
     }
 
     private string GetRegistrationFilePath(Project project, string basePath)
@@ -118,33 +98,6 @@ public class RegistrationManagementService
         return registrations;
     }
 
-    private List<string> GenerateClientSideRegistrations(Feature feature)
-    {
-        var registrations = new List<string>();
-        var moduleNamespace = feature.ModuleNamespace;
-        var componentPrefix = feature.ComponentPrefix;
-
-        // Add comment for the feature
-        registrations.Add($"            // {componentPrefix}");
-
-        if (feature.HasListing)
-        {
-            registrations.Add($"            services.AddScoped<ServiceContracts.Features.{moduleNamespace}.I{componentPrefix}ListingDataService, Features.{moduleNamespace}.{componentPrefix}ListingClientDataService>();");
-        }
-
-        if (feature.HasForm)
-        {
-            registrations.Add($"            services.AddScoped<ServiceContracts.Features.{moduleNamespace}.I{componentPrefix}FormDataService, Features.{moduleNamespace}.{componentPrefix}FormClientDataService>();");
-        }
-
-        if (feature.HasSelectList)
-        {
-            registrations.Add($"            services.AddScoped<ServiceContracts.Features.{moduleNamespace}.I{componentPrefix}SelectListDataService, Features.{moduleNamespace}.{componentPrefix}SelectListClientDataService>();");
-        }
-
-        return registrations;
-    }
-
     private async Task UpdateRegistrationFileWithPlaceholderAsync(string filePath, List<string> newRegistrations, string placeholder)
     {
         try
@@ -156,10 +109,6 @@ public class RegistrationManagementService
                 _logger.LogWarning("Placeholder {Placeholder} not found in file: {FilePath}", placeholder, filePath);
                 return;
             }
-
-            // Build the replacement text: new registrations + placeholder for next time
-            var replacementText = string.Join(Environment.NewLine, newRegistrations) + Environment.NewLine +
-                                 Environment.NewLine + "            " + placeholder;
 
             // Find the placeholder with its current indentation and replace it
             var lines = content.Split(new[] { Environment.NewLine, "\n" }, StringSplitOptions.None);

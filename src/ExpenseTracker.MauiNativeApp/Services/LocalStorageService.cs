@@ -1,7 +1,7 @@
 ﻿using ExpenseTracker.Framework;
 using System.Runtime.CompilerServices;
 
-namespace ExpenseTracker.NativeMauiApp.Services;
+namespace ExpenseTracker.MauiNativeApp.Services;
 
 public class LocalStorageService : ILocalStorageService
 {

@@ -1,9 +1,10 @@
-﻿using ExpenseTracker.Common.Enums;
+using ExpenseTracker.Common.Enums;
 
-namespace ExpenseTracker.ClientShared.Features.Products;
+namespace ExpenseTracker.MauiNativeApp.Features.Products.ViewModels;
+
 public class ProductListingViewModel
 {
-    public string Id { get; set; }
+    public string Id { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
     public decimal Price { get; set; }

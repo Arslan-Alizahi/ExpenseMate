@@ -1,4 +1,4 @@
-﻿using ExpenseTracker.ClientShared.Features.Products;
+﻿using ExpenseTracker.MauiNativeApp.Features.Products.ViewModels;
 using ExpenseTracker.Common.Enums;
 using ExpenseTracker.ServiceContracts.Features.Products;
 using ExpenseTracker.MauiShared; 

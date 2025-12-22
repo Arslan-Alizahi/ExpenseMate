@@ -1,7 +1,7 @@
-﻿using ExpenseTracker.Common.Enums;
+using ExpenseTracker.Common.Enums;
 using ExpenseTracker.Framework;
 
-namespace ExpenseTracker.ClientShared.Features.Products;
+namespace ExpenseTracker.MauiNativeApp.Features.Products.ViewModels;
 
 public class ProductFilterViewModel : BaseFilterViewModel
 {
